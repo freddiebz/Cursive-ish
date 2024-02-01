@@ -231,29 +231,26 @@ class Agent {
     // endpoints of the curve are the midpoints of two adjacent path entries
     for (let [i, v] of this.path.entries()) {
       if (i >= this.seg && this.drawing) break;
-      else if (i === 1) {
-        bezier(
-          this.path[i - 1][0],
-          this.path[i - 1][1],
-          this.path[i - 1][2],
-          this.path[i - 1][3],
-          v[0],
-          v[1],
-          midV(v)[0],
-          midV(v)[1]
-        );
+      if (i == 0) continue;
+      
+      let ax, ay;
+      if (i == 1) {
+        ax = this.path[0][0];
+        ay = this.path[0][1];
       } else if (i > 1) {
-        bezier(
-          midV(this.path[i - 1])[0],
-          midV(this.path[i - 1])[1],
-          this.path[i - 1][2],
-          this.path[i - 1][3],
-          v[0],
-          v[1],
-          midV(v)[0],
-          midV(v)[1]
-        );
+        ax = midV(this.path[i - 1])[0];
+        ay = midV(this.path[i - 1])[1];
       }
+      bezier(
+        ax,
+        ay,
+        this.path[i - 1][2],
+        this.path[i - 1][3],
+        v[0],
+        v[1],
+        midV(v)[0],
+        midV(v)[1]
+      );
     }
 
     pop();
